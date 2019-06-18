@@ -12,4 +12,13 @@ s=sim(1.988e30, 1.898e27,  7.7857e11, 5000, r_disco)
 r=s.run(1)
 
 #extrae las posiciones de los cuerpos
-print()
+xx, yy = zip(*[[c.x, c.y] for c in r])
+print(xx)
+print(yy)
+
+#dibuja
+pt.figure()
+pt.plot(xx,yy,'b.')
+pt.xlim(-r_disco,r_disco)
+pt.ylim(-r_disco,r_disco)
+pt.show()
