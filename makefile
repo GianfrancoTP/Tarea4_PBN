@@ -32,3 +32,6 @@ cuerpo.o: cuerpo.cpp cuerpo.h
 clean:
 	rm -f *.o *.so *.cxx $(LIB) $(LE).py $(EXE) *.pyc
 	rm -f -r __pycache__/
+
+run: $(EXE)
+	./$(EXE)

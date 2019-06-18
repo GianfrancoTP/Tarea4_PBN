@@ -1,12 +1,14 @@
 #include "cuerpo.h"
 #include "gravitacion.h"
 
+using namespace std;
+
 Simulacion sim(double ms, double mp, double rp, int na, double rd){
 	double G = 6.674*(pow(10,-11));
 	double radio_sol = 7*pow(10,8);
 	cuerpo *sol = new cuerpo(ms, 0, 0, 0, 0, radio_sol);
 	double radio_planeta = 7*pow(10,7);
-	cuerpo *planeta = new cuerpo(mp, 0, rp, 0, pow(G*mp,0.5), radio_planeta);
+	cuerpo *planeta = new cuerpo(mp, 0, rp, pow(G*ms/(rp),0.5), 0, radio_planeta);
 	Simulacion *s = new Simulacion(sol, planeta);
 	return *s;
 }
@@ -20,9 +22,9 @@ std::vector<double> Simulacion::Calcular_fuersas(cuerpo c1, cuerpo c2){
 	double G = 6.674*(pow(10,-11));
 	// Calculo del angulo entre ambos cuerpos
 	double angulo;
-	double delta_x = c1.x - c2.x;
-	double delta_y = c1.y - c2.y;
-	angulo = atan2((double)delta_y,(double)delta_x)*180/3.14159265359;
+	double delta_x = c2.x - c1.x;
+	double delta_y = c2.y - c1.y;
+	angulo = atan2((double)delta_y,(double)delta_x);
 	//Calculo de las fuerzas en el eje X e Y
 	double magnitud_F = (G*c1.masa*c2.masa)/((delta_x*delta_x) + (delta_y*delta_y));
 	double fx = magnitud_F*cos(angulo);

@@ -1,8 +1,10 @@
 #ifndef _GRAVITACION
 #define _GRAVITACION
 
+#include<iostream>
 #include <stdlib.h>
 #include <cmath>
+#include <random>
 #include<vector>
 
 
