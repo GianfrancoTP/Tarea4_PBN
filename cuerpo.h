@@ -9,9 +9,10 @@ public:
 	double y;
 	double vx;
 	double vy;
+	double radio;
 
-	cuerpo(double masa, double x, double y, double vx, double vy);
-	double Ley_gun(double masa1, double radio);
+	cuerpo(double masa, double x, double y, double vx, double vy, double radio);
+	cuerpo() {};
 };
 
 #endif

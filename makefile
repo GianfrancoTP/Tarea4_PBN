@@ -3,7 +3,7 @@ EXE=grav
 LE=gravitacion
 LIB=lib$(LE).so
 LPY=_$(LE).so
-flags = -std=c++11 -Wall -Wextra -Wundef -Werror -Wuninitialized -Winit-self
+flags = -std=c++11 -Wall -Wextra -Wundef -Wuninitialized -Winit-self
 
 #la libreria de Python
 $(LPY): $(LE).i $(LE).o
@@ -17,14 +17,13 @@ $(EXE): main.o $(LIB) libcuerpo.so
 main.o: main.cpp $(LE).h cuerpo.h
 	$(CC) $(flags) -c -o main.o main.cpp
 
-#-shared LINKEA como libreria dinamica
 $(LIB): $(LE).o
 	$(CC) -shared $(LE).o -o $(LIB)
 
 libcuerpo.so: cuerpo.o
 	$(CC) -shared cuerpo.o -o libcuerpo.so
 
-$(LE).o: $(LE).cpp cuerpo.o
+$(LE).o: $(LE).cpp $(LE).h
 	$(CC) $(flags) -c -fPIC -o $(LE).o $(LE).cpp
 
 cuerpo.o: cuerpo.cpp cuerpo.h
