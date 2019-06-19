@@ -3,6 +3,9 @@
 
 using namespace std;
 
+const double G = 6.674*(pow(10,-11));
+
+
 Simulacion sim(double ms, double mp, double rp, int na, double rd){
 
 	std::vector<cuerpo> asteroides;
@@ -14,7 +17,6 @@ Simulacion sim(double ms, double mp, double rp, int na, double rd){
 
 	double radio_asteroide;
 
-	double G = 6.674*(pow(10,-11));
 	double radio_sol = 7*pow(10,8);
 	cuerpo *sol = new cuerpo(ms, 0, 0, 0, 0, radio_sol);
 	double radio_planeta = 7*pow(10,7);
@@ -51,7 +53,6 @@ Simulacion::Simulacion(cuerpo *sol, cuerpo *planeta, vector<cuerpo> asteroides){
 }
 
 std::vector<double> Simulacion::Calcular_fuerza(cuerpo c1, cuerpo c2){
-	double G = 6.674*(pow(10,-11));
 	// Calculo del angulo entre ambos cuerpos
 	double angulo;
 	double delta_x = c2.x - c1.x;
@@ -92,7 +93,6 @@ bool Simulacion::trayectoria_escape(cuerpo& c1){
 	double radio_AsteroideSol = pow((delta_x*delta_x) + (delta_y*delta_y),0.5);
 	if (radio_AsteroideSol*2 > radio_PlanetaSol)
 	{
-		double G = 6.674*(pow(10,-11));
 		double angulo = atan2(delta_y,delta_x);
 		double velocidad_radial = sin(angulo)*c1.vy - cos(angulo)*c1.vx;
 		double velocidad_escape = pow(2*G*sol.masa/radio_AsteroideSol,0.5);

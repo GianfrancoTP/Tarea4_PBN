@@ -17,7 +17,7 @@ fig.show()
 
 i = 0
 #simula 4600 dias
-while i < 200:
+while i < 300:
 
 	r=s.run(20)
 
