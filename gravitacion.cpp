@@ -2,9 +2,7 @@
 #include "gravitacion.h"
 
 using namespace std;
-
 const double G = 6.674*(pow(10,-11));
-
 
 Simulacion sim(double ms, double mp, double rp, int na, double rd){
 
