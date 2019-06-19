@@ -9,6 +9,8 @@ public:
 	double y;
 	double vx;
 	double vy;
+	double fx;
+	double fy;
 	double radio;
 	bool colision = false;
 
