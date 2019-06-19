@@ -31,7 +31,6 @@ Simulacion sim(double ms, double mp, double rp, int na, double rd){
 		radio_asteroide = pow((x*x) + (y*y),0.5);
 		while (radio_asteroide > rd)
 		{
-			//std::cout << "Entro !!"<< std::endl;
 			y = pos(generator) - rd;
 			x = pos(generator) - rd;
 			radio_asteroide = pow((x*x) + (y*y),0.5);
@@ -84,6 +83,7 @@ void Simulacion::Mover_objetos(cuerpo& c1){
 }
 
 bool Simulacion::trayectoria_escape(cuerpo& c1){
+	bool escape = false;
 	double delta_x = planeta.x - sol.x;
 	double delta_y = planeta.y - sol.y;
 	double radio_PlanetaSol = pow((delta_x*delta_x) + (delta_y*delta_y),0.5);
@@ -92,11 +92,16 @@ bool Simulacion::trayectoria_escape(cuerpo& c1){
 	double radio_AsteroideSol = pow((delta_x*delta_x) + (delta_y*delta_y),0.5);
 	if (radio_AsteroideSol*2 > radio_PlanetaSol)
 	{
-		return true;
+		double G = 6.674*(pow(10,-11));
+		double angulo = atan2(delta_y,delta_x);
+		double velocidad_radial = sin(angulo)*c1.vy - cos(angulo)*c1.vx;
+		double velocidad_escape = pow(2*G*sol.masa/radio_AsteroideSol,0.5);
+		if (velocidad_radial >= velocidad_escape)
+		{
+			escape = true;
+		}
 	}
-	else{
-		return false;
-	}
+	return escape;
 }
 
 std::vector<cuerpo> Simulacion::run(int tiempo){
@@ -153,8 +158,11 @@ std::vector<cuerpo> Simulacion::run(int tiempo){
 			delta_x = sol.x - asteroides[i].x;
 			delta_y = sol.y - asteroides[i].y;
 			radio_SolAsteroides = pow((delta_x*delta_x) + (delta_y*delta_y),0.5);
-
-			if (radio_PlanetaAsteroides <= planeta.radio)
+			if (trayectoria_escape(asteroides[i]))
+			{
+				asteroides.erase(asteroides.begin() + i);
+			}
+			else if (radio_PlanetaAsteroides <= planeta.radio)
 			{
 				double masa_total = planeta.masa + asteroides[i].masa;
 				double velocidad_x = ((asteroides[i].masa*asteroides[i].vx)+(planeta.masa*planeta.vx))/masa_total;
@@ -187,7 +195,6 @@ std::vector<cuerpo> Simulacion::run(int tiempo){
 		{
 			Mover_objetos(asteroides[i]);
 		}
-
 	}
 
 	std::vector<cuerpo> cuerpos;
