@@ -19,7 +19,8 @@ public:
 	std::vector<double> Calcular_fuerza(cuerpo c1, cuerpo c2);
 	void Mover_objetos(cuerpo& c1);
 	void Interactuar_objetos(cuerpo& c1, cuerpo& c2);
-	std::vector<cuerpo> run(double tiempo);
+	bool trayectoria_escape(cuerpo& c1);
+	std::vector<cuerpo> run(int tiempo);
 };
 
 Simulacion sim(double ms, double mp, double rp, int na, double rd);

@@ -15,10 +15,17 @@ r_disco=3e12
 s=sim(1.988e30, 1.898e27,  7.7857e11, 500, r_disco)
 fig.show()
 
+xx, yy = zip(*[[c.x, c.y] for c in s.asteroides])
+for i in range(len(s.asteroides)):
+	b = (s.asteroides[i].x**2) + (s.asteroides[i].y**2)
+	print(b**0.5 ,b**0.5 < r_disco)
+
+
 i = 0
 #simula 4600 dias
-while i < 100:
-	r=s.run(46)
+while i < 300:
+
+	r=s.run(100)
 
 	#extrae las posiciones de los cuerpos
 	xx, yy = zip(*[[c.x, c.y] for c in r])
@@ -33,4 +40,6 @@ while i < 100:
 	time.sleep(0.01)
 	fig.clf()
 	i += 1
+
+print((s.planeta.x**2 + s.planeta.y**2)**0.5)
 pt.close()

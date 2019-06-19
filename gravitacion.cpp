@@ -22,21 +22,23 @@ Simulacion sim(double ms, double mp, double rp, int na, double rd){
 
 	// Aqui creamos los asteroides
 
-	std::uniform_int_distribution<uint_fast64_t> pos(0,rd);
+	std::uniform_int_distribution<uint_fast64_t> pos(0, 2*rd);
 	for (int i = 0; i < na; ++i)
 	{
-		double y = pos(generator) - rd/2;
-		double x = pos(generator) - rd/2;
+		double y = pos(generator) - rd;
+		double x = pos(generator) - rd;
 
 		radio_asteroide = pow((x*x) + (y*y),0.5);
 		while (radio_asteroide > rd)
 		{
-			double y = pos(generator) - rd/2;
-			double x = pos(generator) - rd/2;
+			//std::cout << "Entro !!"<< std::endl;
+			y = pos(generator) - rd;
+			x = pos(generator) - rd;
 			radio_asteroide = pow((x*x) + (y*y),0.5);
 		}
 		angulo = atan2(y,x);
-		cuerpo *asteroide = new cuerpo(pow(10,18), x, y, pow(G*ms/radio_asteroide,0.5)*sin(angulo), -pow(G*ms/radio_asteroide,0.5)*cos(angulo), 0);
+		radio_asteroide = pow((x*x) + (y*y),0.5);
+		cuerpo *asteroide = new cuerpo(pow(10, 18), x, y, pow(G*ms/radio_asteroide,0.5)*sin(angulo), -pow(G*ms/radio_asteroide,0.5)*cos(angulo), 0);
 		asteroides.push_back(*asteroide);
 	}
 	Simulacion *s = new Simulacion(sol, planeta, asteroides);
@@ -81,7 +83,23 @@ void Simulacion::Mover_objetos(cuerpo& c1){
 	c1.y += c1.vy*86400;
 }
 
-std::vector<cuerpo> Simulacion::run(double tiempo){
+bool Simulacion::trayectoria_escape(cuerpo& c1){
+	double delta_x = planeta.x - sol.x;
+	double delta_y = planeta.y - sol.y;
+	double radio_PlanetaSol = pow((delta_x*delta_x) + (delta_y*delta_y),0.5);
+	delta_x = c1.x - sol.x;
+	delta_y = c1.y - sol.y;
+	double radio_AsteroideSol = pow((delta_x*delta_x) + (delta_y*delta_y),0.5);
+	if (radio_AsteroideSol*2 > radio_PlanetaSol)
+	{
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
+std::vector<cuerpo> Simulacion::run(int tiempo){
 	double radio_PlanetaAsteroides;
 	double radio_SolAsteroides;
 	double delta_x;
@@ -114,9 +132,12 @@ std::vector<cuerpo> Simulacion::run(double tiempo){
 
 			if (radio_PlanetaSol <= sol.radio)
 			{
-				sol.masa += planeta.masa;
-				sol.vx += planeta.vx;
-				sol.vy += planeta.vy;
+				double masa_total = sol.masa + planeta.masa;
+				double velocidad_x = ((planeta.masa*planeta.vx)+(sol.masa*sol.vx))/masa_total;
+				double velocidad_y = ((planeta.masa*planeta.vy)+(sol.masa*sol.vy))/masa_total;
+				sol.masa = masa_total;
+				sol.vx = velocidad_x;
+				sol.vy = velocidad_y;
 				planeta.masa = 0;
 				planeta.vx = 0;
 				planeta.vy = 0;
@@ -135,12 +156,24 @@ std::vector<cuerpo> Simulacion::run(double tiempo){
 
 			if (radio_PlanetaAsteroides <= planeta.radio)
 			{
-				planeta.masa += asteroides[i].masa;
+				double masa_total = planeta.masa + asteroides[i].masa;
+				double velocidad_x = ((asteroides[i].masa*asteroides[i].vx)+(planeta.masa*planeta.vx))/masa_total;
+				double velocidad_y = ((asteroides[i].masa*asteroides[i].vy)+(planeta.masa*planeta.vy))/masa_total;
+				planeta.masa = masa_total;
+				planeta.vx = velocidad_x;
+				planeta.vy = velocidad_y;
+				planeta.colision = true;
 				asteroides.erase(asteroides.begin() + i);
 			}
 			else if (radio_SolAsteroides <= sol.radio)
 			{
-				sol.masa += asteroides[i].masa;
+				double masa_total = sol.masa + asteroides[i].masa;
+				double velocidad_x = ((asteroides[i].masa*asteroides[i].vx)+(sol.masa*sol.vx))/masa_total;
+				double velocidad_y = ((asteroides[i].masa*asteroides[i].vy)+(sol.masa*sol.vy))/masa_total;
+				sol.masa = masa_total;
+				sol.vx = velocidad_x;
+				sol.vy = velocidad_y;
+				sol.colision = true;
 				asteroides.erase(asteroides.begin() + i);
 			}
 		}
