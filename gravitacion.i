@@ -17,8 +17,9 @@ public:
 	cuerpo planeta;
 	std::vector<cuerpo> asteroides;
 
-	Simulacion(cuerpo *sol, cuerpo *planeta);
-	std::vector<double> Calcular_fuersas(cuerpo c1, cuerpo c2);
+	Simulacion(cuerpo *sol, cuerpo *planeta, std::vector<cuerpo> asteroides);
+	std::vector<double> Calcular_fuerza(cuerpo c1, cuerpo c2);
+	void Interactuar_objetos(cuerpo c1, cuerpo c2);
 	std::vector<cuerpo> run(double tiempo);
 };
 
@@ -33,6 +34,7 @@ public:
 	double vx;
 	double vy;
 	double radio;
+	bool colision = false;
 
 	cuerpo(double masa, double x, double y, double vx, double vy, double radio);
 	cuerpo() {};

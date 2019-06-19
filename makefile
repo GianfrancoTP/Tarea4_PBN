@@ -3,7 +3,7 @@ EXE=grav
 LE=gravitacion
 LIB=lib$(LE).so
 LPY=_$(LE).so
-flags = -std=c++11 -Wall -Wextra -Wundef -Wuninitialized -Winit-self
+flags = -std=c++11 -Wall -Wextra -Wundef -Werror -Wuninitialized -Winit-self
 
 #la libreria de Python
 $(LPY): $(LE).i $(LE).o
@@ -33,5 +33,5 @@ clean:
 	rm -f *.o *.so *.cxx $(LIB) $(LE).py $(EXE) *.pyc
 	rm -f -r __pycache__/
 
-run: $(EXE)
-	./$(EXE)
+run: $(LPY)
+	python3 prueba.py
