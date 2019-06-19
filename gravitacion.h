@@ -8,7 +8,6 @@
 #include<ctime>
 #include<vector>
 
-
 class Simulacion{
 public:
 	cuerpo sol;

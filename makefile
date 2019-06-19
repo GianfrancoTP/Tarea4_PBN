@@ -11,15 +11,6 @@ $(LPY): $(LE).i $(LE).o
 	g++ -fPIC -c $(LE)_wrap.cxx cuerpo.cpp -I/usr/include/python3.6/
 	g++ -shared $(LE).o cuerpo.o $(LE)_wrap.o -o $(LPY)
 
-$(EXE): main.o $(LIB) libcuerpo.so
-	$(CC) $(flags) -o $(EXE) -Wl,-rpath=. main.o -L. -l$(LE) -lcuerpo
-
-main.o: main.cpp $(LE).h cuerpo.h
-	$(CC) $(flags) -c -o main.o main.cpp
-
-$(LIB): $(LE).o
-	$(CC) -shared $(LE).o -o $(LIB)
-
 libcuerpo.so: cuerpo.o
 	$(CC) -shared cuerpo.o -o libcuerpo.so
 
