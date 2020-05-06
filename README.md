@@ -1,2 +1,2 @@
 # Tarea4_PBN
-Crear una libertaria para python
+Crear una librería para python
